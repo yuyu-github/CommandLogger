@@ -1,0 +1,12 @@
+name: CommandLogger
+version: '${project.version}'
+main: xyz.yuyu.commandlogger.CommandLogger
+api-version: 1.19
+authors: [ yuyu ]
+commands:
+  commandlog:
+    aliases: [ cl ]
+    permission: commandlogger.commands.commandlog
+permissions:
+  commandlogger.commands.commandlog:
+    default: op
