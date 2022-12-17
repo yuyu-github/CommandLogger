@@ -11,6 +11,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import xyz.yuyu.commandlogger.commands.Commandlog;
 
 import java.io.File;
 import java.security.MessageDigest;
@@ -29,6 +30,8 @@ public final class CommandLogger extends JavaPlugin {
     plugin = this;
 
     Bukkit.getServer().getPluginManager().registerEvents(new LogCommand(), this);
+
+    getCommand("commandlog").setExecutor(new Commandlog());
 
     config = new Config(this);
 
