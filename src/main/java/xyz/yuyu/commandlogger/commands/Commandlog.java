@@ -29,10 +29,12 @@ public class Commandlog implements CommandExecutor, TabCompleter {
     }
 
     List<String> result = new ArrayList<>();
-    for (String item : list) {
-      if (item.startsWith(value)) result.add(item);
+    if (value.matches(" *")) result = Arrays.asList(list);
+    else {
+      for (String item : list) {
+        if (item.startsWith(value)) result.add(item);
+      }
     }
-    if (result.size() == 0) result = Arrays.asList(list);
     return result;
   };
 
