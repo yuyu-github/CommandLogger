@@ -1,14 +1,12 @@
 package xyz.yuyu.commandlogger;
 
 import org.bukkit.Location;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 
@@ -42,7 +40,8 @@ public class LogCommand implements Listener {
     }
 
     if (!type.equals("")) {
-      Config logfile = new Config(CommandLogger.plugin, "logs/" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".yml");
+      Config logfile = new Config(CommandLogger.plugin,
+          "logs/" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".yml");
       FileConfiguration log = logfile.getConfig();
       String uuid = UUID.randomUUID().toString();
       log.set(uuid + ".command", command);

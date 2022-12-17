@@ -1,27 +1,14 @@
 package xyz.yuyu.commandlogger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.command.BlockCommandSender;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.yuyu.commandlogger.commands.Commandlog;
 
-import java.io.File;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
+import java.util.Objects;
 
 public final class CommandLogger extends JavaPlugin {
-  static Plugin plugin;
+  public static Plugin plugin;
 
   Config config;
 
@@ -31,7 +18,7 @@ public final class CommandLogger extends JavaPlugin {
 
     Bukkit.getServer().getPluginManager().registerEvents(new LogCommand(), this);
 
-    getCommand("commandlog").setExecutor(new Commandlog());
+    Objects.requireNonNull(getCommand("commandlog")).setExecutor(new Commandlog());
 
     config = new Config(this);
 
