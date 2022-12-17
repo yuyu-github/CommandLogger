@@ -56,7 +56,8 @@ public class Commandlog implements CommandExecutor, TabCompleter {
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
-        for (; day > 0; day--, cal.add(Calendar.DAY_OF_MONTH, -1)) {
+        cal.add(Calendar.DAY_OF_MONTH, -(day - 1));
+        for (; day > 0; day--, cal.add(Calendar.DAY_OF_MONTH, 1)) {
           Config logfile = new Config(CommandLogger.plugin,
               "logs/" + new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()) + ".yml");
           FileConfiguration log = logfile.getConfig();
