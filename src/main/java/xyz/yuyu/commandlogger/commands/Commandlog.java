@@ -78,7 +78,7 @@ public class Commandlog implements CommandExecutor, TabCompleter {
               if (!match) continue;
             }
 
-            if (conditions.containsKey("type") && !conditions.get("type").contains(type_)) continue;
+            if (conditions.containsKey("type") && !conditions.get("type").contains(type_ != null ? type_.toLowerCase() : null)) continue;
             if (conditions.containsKey("name") && !conditions.get("name").contains(name)) continue;
 
             long time = log.getLong(key + ".time");
