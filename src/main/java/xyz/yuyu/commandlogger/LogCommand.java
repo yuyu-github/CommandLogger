@@ -23,6 +23,7 @@ public class LogCommand implements Listener {
     double x = 0;
     double y = 0;
     double z = 0;
+    String world = "";
 
     String type = "";
     if (sender instanceof ConsoleCommandSender) type = "Console";
@@ -34,6 +35,7 @@ public class LogCommand implements Listener {
         x = location.getX();
         y = location.getY();
         z = location.getZ();
+        world = location.getWorld().getName();
         break;
       default:
         hasLocation = false;
@@ -54,6 +56,7 @@ public class LogCommand implements Listener {
         log.set(uuid + ".location.x", x);
         log.set(uuid + ".location.y", y);
         log.set(uuid + ".location.z", z);
+        log.set(uuid + ".location.world", world);
       }
 
       logfile.saveConfig();

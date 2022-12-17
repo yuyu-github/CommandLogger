@@ -85,10 +85,12 @@ public class Commandlog implements CommandExecutor, TabCompleter {
 
             boolean hasLocation = log.contains(key + ".location");
             double x = 0, y = 0, z = 0;
+            String world = "";
             if (hasLocation) {
               x = log.getDouble(key + ".location.x");
               y = log.getDouble(key + ".location.y");
               z = log.getDouble(key + ".location.z");
+              if (log.contains(key + ".location.world")) world = log.getString(key + ".location.world");
             }
 
             String str = "";
@@ -100,6 +102,7 @@ public class Commandlog implements CommandExecutor, TabCompleter {
               str += " X:" + String.format("%.2f", x);
               str += " Y:" + String.format("%.2f", y);
               str += " Z:" + String.format("%.2f", z);
+              if (!world.equals("")) str += " " + world;
             }
             results.add(str);
           }
