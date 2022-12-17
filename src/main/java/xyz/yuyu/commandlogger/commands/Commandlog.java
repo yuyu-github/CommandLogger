@@ -112,6 +112,8 @@ public class Commandlog implements CommandExecutor, TabCompleter {
     }
   }
 
+  List<String> matches(List<String> list, String value) { return matches(list, value, ""); }
+  List<String> matches(List<String> list, String value, String prefix) { return matches(list.toArray(new String[0]), value, prefix); }
   List<String> matches(String[] list, String value) { return matches(list, value, ""); }
   List<String> matches(String[] list, String value, String prefix) {
     if (!prefix.equals("")) {
@@ -157,8 +159,9 @@ public class Commandlog implements CommandExecutor, TabCompleter {
                 result = matches(new String[]{"player", "console"}, args[args.length - 1], space ? "" : "type=");
                 break;
               case "name":
-                result = Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList());
-                result.add("CONSOLE");
+                List<String> list = Bukkit.getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toList());
+                list.add("CONSOLE");
+                result = matches(list, args[args.length - 1], space ? "" : "name=");
                 break;
               case "time":
                 if (args[args.length - 1].equals("") || args[args.length - 1].endsWith("="))
