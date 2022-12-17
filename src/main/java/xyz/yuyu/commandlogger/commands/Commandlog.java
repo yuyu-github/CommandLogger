@@ -1,5 +1,9 @@
 package xyz.yuyu.commandlogger.commands;
 
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -8,11 +12,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.util.ChatPaginator;
 import xyz.yuyu.commandlogger.CommandLogger;
 import xyz.yuyu.commandlogger.Config;
 
+import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -107,8 +114,27 @@ public class Commandlog implements CommandExecutor, TabCompleter {
             results.add(str);
           }
         }
-        CommandLogger.plugin.getLogger().info(String.join(",", results));
-        sender.sendMessage(results.toArray(new String[0]));
+
+        int linesPerPage = CommandLogger.plugin.config.getConfig().getInt("lines-per-page");
+        if (linesPerPage <= 0) linesPerPage = 10;
+        int maxPage = (int)Math.ceil((double)results.size() / linesPerPage);
+        int page = 1;
+        if (conditions.containsKey("page")) try { page = Integer.parseInt(conditions.get("page").get(0)); } catch (Exception e) {}
+        if (page < 1) page = 1;
+        if (page > maxPage) page = maxPage;
+
+        sender.sendMessage(results.subList(Math.max(0, results.size() - page * linesPerPage), Math.max(0, results.size() - (page - 1) * linesPerPage)).toArray(new String[0]));
+        ComponentBuilder msg = new ComponentBuilder("                    ");
+        if (page > 1) msg.append("←").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+            "/commandlog search page=" + (page - 1) + " " + (args.length > 1 ?
+                String.join(" ", Arrays.copyOfRange(args, 1, args.length)).replaceAll("(^| )page= ?[^ ]+($| )", " ") : "")));
+        else msg.append(ChatColor.GRAY + "←");
+        msg.append(" " + page + "/" + maxPage + " ").reset();
+        if (page < maxPage) msg.append("→").event(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+            "/commandlog search page=" + (page + 1) + " " + (args.length > 1 ?
+                String.join(" ", Arrays.copyOfRange(args, 1, args.length)).replaceAll("(^| )page= ?[^ ]+($| )", " ") : "")));
+        else msg.append(ChatColor.GRAY + "→");
+        sender.spigot().sendMessage(msg.create());
         return true;
       default:
         return false;
@@ -144,7 +170,7 @@ public class Commandlog implements CommandExecutor, TabCompleter {
       switch (args[0]) {
         case "search":
           if (!(args[args.length - 1].contains("=") || args[args.length - 2].endsWith("="))) {
-            result = matches(new String[]{"command=", "type=", "name=", "time="}, args[args.length - 1]);
+            result = matches(new String[]{"command=", "type=", "name=", "time=", "page="}, args[args.length - 1]);
           } else {
             String type;
             boolean space;
@@ -175,6 +201,9 @@ public class Commandlog implements CommandExecutor, TabCompleter {
                       m.find() ? m.group() : "");
                 }
                 break;
+              case "page":
+                if (args[args.length - 1].equals("") || args[args.length - 1].endsWith("="))
+                  result = matches(new String[]{"1","2","3","4","5","6","7","8","9"}, args[args.length - 1], args[args.length - 1]);
             }
           }
           break;

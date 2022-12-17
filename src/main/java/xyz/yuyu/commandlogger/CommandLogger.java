@@ -8,9 +8,9 @@ import xyz.yuyu.commandlogger.commands.Commandlog;
 import java.util.Objects;
 
 public final class CommandLogger extends JavaPlugin {
-  public static Plugin plugin;
+  public static CommandLogger plugin;
 
-  Config config;
+  public Config config;
 
   @Override
   public void onEnable() {
